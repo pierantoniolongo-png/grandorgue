@@ -86,7 +86,9 @@ jobs:
       shell: bash
       run: |
         git fetch --prune --unshallow --tags || true
-        GIT_VERSION=`git describe --tags`
+        # forks may have no version tags: derive the version from version.txt
+        GIT_VERSION=`git describe --tags 2>/dev/null` \
+          || GIT_VERSION="$(cat version.txt)-0-$(git rev-list --count HEAD)-g$(git rev-parse --short HEAD)"
         PROJECT_VERSION=`echo $GIT_VERSION | cut -d- -f1`
         BUILD_VERSION=`echo $GIT_VERSION | cut -d- -f2-3 --output-delimiter=.`
         GIT_CHANGE_NUM=`echo $GIT_VERSION | cut -d- -f3`
