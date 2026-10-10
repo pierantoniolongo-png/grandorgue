@@ -764,8 +764,11 @@ GOConfigMidiObject *GOConfig::FindMidiInitialObject(
         && desc.m_index == midiInputNumber;
     });
 
-  return foundDesc != builInEnd
-    ? m_InitialMidiObjects[foundDesc - INTERNAL_MIDI_DESCS]
+  const unsigned foundIndex = foundDesc - INTERNAL_MIDI_DESCS;
+
+  // The built-in objects may be absent if the defaults have not been loaded
+  return foundDesc != builInEnd && foundIndex < m_InitialMidiObjects.size()
+    ? m_InitialMidiObjects[foundIndex]
     : nullptr;
 }
 

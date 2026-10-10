@@ -586,6 +586,49 @@ Opens a bunch of menus and sub menus allowing to select a new tuning temperament
             <link linkend="initialconfiguration">Initial MIDI</link>.
 	  </para>
         </sect3>
+        <sect3 id="midisetupwizard">
+          <title>MIDI setup wizard</title>
+          <indexterm><primary>MIDI setup wizard</primary></indexterm>
+          <para>Opens a step-by-step assistant that configures the MIDI
+            console in a few minutes, without editing every element by hand.
+            It is useful when a new console (keyboards, pedalboard, expression
+            pedals, toe studs) is connected, for example a set of MIDI
+            keyboards together with a Behringer FCB1010 floor controller.</para>
+          <orderedlist>
+            <listitem><para><emphasis role="strong">MIDI devices.</emphasis>
+              Lists the MIDI input devices found on the computer and, live,
+              every device/channel/message that arrives while the user plays
+              keys, moves pedals or presses footswitches. This shows at a glance
+              which channel each keyboard is sending on.</para></listitem>
+            <listitem><para><emphasis role="strong">What to configure.</emphasis>
+              The pedalboard and manuals of the loaded organ, its enclosures,
+              the crescendo pedal and up to ten toe studs are listed. Every toe
+              stud can be assigned a function: the generals of the combination
+              setter, sequencer previous/next/current, general cancel, set, or
+              one of the generals defined by the sample set.</para></listitem>
+            <listitem><para><emphasis role="strong">Learning.</emphasis> The
+              wizard asks to touch every selected element in turn and detects
+              the MIDI device, the channel and the controller automatically:
+              a key for a keyboard, a Control Change for an expression or
+              crescendo pedal, a Note, a Control Change or a Program Change for
+              a toe stud. Events coming from elements already learned are
+              ignored, so the same channel or controller can never be assigned
+              twice by mistake. Every element can be learned again or
+              skipped.</para></listitem>
+            <listitem><para><emphasis role="strong">Summary.</emphasis> The
+              assignments are applied to the loaded organ. When
+              <emphasis>Use these assignments for all organs</emphasis> is
+              checked, they are also stored in the
+              <link linkend="initialconfiguration">Initial MIDI</link> settings,
+              so every sample set loaded later uses the same console.</para></listitem>
+          </orderedlist>
+          <para>If the organ definition file does not specify
+            <emphasis>MIDIInputNumber</emphasis> for its manuals and
+            enclosures, GrandOrgue assigns it by position (the pedal is 1, the
+            first manual is 2, ...; the first enclosure is 1, the second one is
+            2, ...), so the initial MIDI settings of the keyboards and of the
+            expression pedals apply to such organs as well.</para>
+        </sect3>
         <sect3 id="accessibility-stops">
           <title>Stops</title>
           <indexterm><primary>Stops</primary></indexterm>
@@ -5176,11 +5219,12 @@ are used again to initialize the MIDI configuration.
       </para>
       <note>
         <simpara>
-The sample set creator must define proper <emphasis role="bold">
+The sample set creator should define proper <emphasis role="bold">
 <emphasis>MIDIInputNumber</emphasis></emphasis> values in the Organ
 Definition File to make <link linkend="odfManualEntry">manual mapping</link>
 and <link linkend="odfEnclosureEntry">enclosure mapping</link> to the initial
-MIDI settings work properly.
+MIDI settings work properly. If they are missing, GrandOrgue maps the manuals
+and the enclosures by their position in the Organ Definition File.
         </simpara>
       </note>
       <para>

@@ -31,6 +31,7 @@
 #include "gui/GOGuiApp.h"
 #include "gui/GOGuiOrgan.h"
 #include "gui/dialogs/GOMidiChannelMappingDialog.h"
+#include "gui/dialogs/GOMidiSetupWizard.h"
 #include "gui/dialogs/GONewReleaseDialog.h"
 #include "gui/dialogs/GOProgressDialog.h"
 #include "gui/dialogs/GOPropertiesDialog.h"
@@ -100,6 +101,7 @@ EVT_MENU(ID_FILE_CACHE, GOAppWindow::OnCache)
 EVT_MENU(ID_FILE_CACHE_DELETE, GOAppWindow::OnCacheDelete)
 EVT_MENU(ID_ORGAN_EDIT, GOAppWindow::OnOrganSettings)
 EVT_MENU(ID_MIDI_LIST, GOAppWindow::OnMidiList)
+EVT_MENU(ID_MIDI_WIZARD, GOAppWindow::OnMidiWizard)
 EVT_MENU(ID_STOPS, GOAppWindow::OnStops)
 EVT_MENU(ID_MIDI_MONITOR, GOAppWindow::OnMidiMonitor)
 EVT_MENU(ID_AUDIO_PANIC, GOAppWindow::OnAudioPanic)
@@ -263,6 +265,11 @@ GOAppWindow::GOAppWindow(
     ID_ORGAN_EDIT, _("&Organ settings"), wxEmptyString, wxITEM_CHECK);
   m_audio_menu->Append(
     ID_MIDI_LIST, _("M&idi Objects"), wxEmptyString, wxITEM_CHECK);
+  m_audio_menu->Append(
+    ID_MIDI_WIZARD,
+    _("MIDI setup &wizard..."),
+    _("Detect the MIDI devices and assign keyboards, pedals and toe studs"),
+    wxITEM_NORMAL);
   m_audio_menu->Append(ID_STOPS, _("Stops"), wxEmptyString, wxITEM_CHECK);
   m_audio_menu->AppendSeparator();
   m_audio_menu->Append(
@@ -1272,6 +1279,21 @@ void GOAppWindow::OnOrganSettings(wxCommandEvent &event) {
 void GOAppWindow::OnMidiList(wxCommandEvent &event) {
   if (mp_organ)
     mp_organ->ShowMidiList();
+}
+
+void GOAppWindow::OnMidiWizard(wxCommandEvent &event) {
+  if (p_OrganController) {
+    GOMidiSetupWizard wizard(this, *p_OrganController, r_MidiSystem);
+
+    if (
+      wizard.ShowModal() == wxID_OK && wizard.IsToSaveOrgan()
+      && !p_OrganController->Save())
+      GOMessageBox(
+        _("Failed to save the organ setting"),
+        _("Error"),
+        wxOK | wxICON_ERROR,
+        this);
+  }
 }
 
 void GOAppWindow::OnStops(wxCommandEvent &event) {

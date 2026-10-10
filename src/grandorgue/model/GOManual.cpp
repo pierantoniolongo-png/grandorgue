@@ -119,6 +119,12 @@ void GOManual::Init(
 }
 
 void GOManual::Load(GOConfigReader &cfg, const wxString &group) {
+  // If the ODF does not define MIDIInputNumber, map the manual to the
+  // Initial MIDI settings by its position: the pedal (Manual000) to 1, the
+  // first manual to 2 and so on. It matches the built-in Initial MIDI objects
+  // "Pedal", "Manual 1", ...
+  if (GetMidiInputNumber() < 0)
+    SetMidiInputNumber(m_manual_number + 1);
   GOMidiReceivingSendingObject::Load(
     cfg, group, cfg.ReadStringNotEmpty(ODFSetting, group, wxT("Name")), true);
   m_nb_logical_keys

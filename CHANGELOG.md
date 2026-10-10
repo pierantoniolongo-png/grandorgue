@@ -1,3 +1,6 @@
+- Added a MIDI setup wizard (Audio/MIDI menu) that detects the MIDI devices and learns the channels and controllers of the pedalboard, the manuals, the expression and crescendo pedals and the toe studs (e.g. a Behringer FCB1010), applying them to the current organ and to the Initial MIDI settings
+- Added mapping of manuals and enclosures to the Initial MIDI settings by their position when the ODF does not define MIDIInputNumber
+- Completed the Italian UI translation
 - Fixed MIDI player Play/Stop crashing when triggered by incoming MIDI https://github.com/GrandOrgue/grandorgue/issues/2636
 - Fixed hanging on Panic, on loading another organ, on exit and on removing an audio device in Settings https://github.com/GrandOrgue/grandorgue/issues/2606
 - Fixed Linux packages including unnecessary cpptrace/libdwarf headers and static libraries, causing RPM install conflicts with elfutils https://github.com/GrandOrgue/grandorgue/issues/2596

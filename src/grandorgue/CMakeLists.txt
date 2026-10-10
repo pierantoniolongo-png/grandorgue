@@ -97,6 +97,7 @@ gui/dialogs/settings/GOSettingsReverb.cpp
 gui/dialogs/settings/GOSettingsTemperaments.cpp
 gui/dialogs/GOMidiChannelMappingDialog.cpp
 gui/dialogs/GOMidiObjectsDialog.cpp
+gui/dialogs/GOMidiSetupWizard.cpp
 gui/dialogs/GONewReleaseDialog.cpp
 gui/dialogs/GOProgressDialog.cpp
 gui/dialogs/GOPropertiesDialog.cpp

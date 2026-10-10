@@ -115,6 +115,9 @@ void GOOrganModel::Load(GOConfigReader &cfg) {
 
     pEnclosure->SetContext(&MIDI_CONTEXT_ENCLOSURES);
     set_name_for_context(pEnclosure, num);
+    // Map the enclosure to the Initial MIDI settings by its position if the
+    // ODF does not define MIDIInputNumber explicitly
+    pEnclosure->SetMidiInputNumber(num);
     pEnclosure->Load(cfg, wxString::Format(wxT("Enclosure%03u"), i + 1));
     m_enclosures.push_back(pEnclosure);
   }

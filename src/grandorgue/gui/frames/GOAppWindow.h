@@ -153,6 +153,7 @@ private:
 
   void OnOrganSettings(wxCommandEvent &event);
   void OnMidiList(wxCommandEvent &event);
+  void OnMidiWizard(wxCommandEvent &event);
   void OnStops(wxCommandEvent &event);
 
   void OnAudioPanic(wxCommandEvent &event);
