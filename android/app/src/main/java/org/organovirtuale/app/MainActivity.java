@@ -230,7 +230,7 @@ public class MainActivity extends Activity {
                   OrganState.path = f.getAbsolutePath();
                   OrganState.refresh(MidiMapping.get(this));
                 } catch (Exception e) {
-                  err = e.getMessage();
+                  err = "Descrizione dell'organo non valida: " + e;
                 }
               }
 
