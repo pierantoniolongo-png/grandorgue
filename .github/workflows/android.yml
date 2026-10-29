@@ -1,0 +1,72 @@
+name: Android
+
+on:
+  push:
+    branches:
+      - android
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          set -o pipefail
+          gradle --no-daemon --stacktrace assembleRelease 2>&1 | tee build.log
+
+      - name: Report build errors
+        if: failure()
+        working-directory: android
+        run: |
+          python3 - <<'PY'
+          import re
+          try:
+              lines = open('build.log', errors='replace').read().splitlines()
+          except OSError:
+              lines = ['build.log missing']
+          pat = re.compile(r'error|FAILED|What went wrong|Exception|undefined reference|cannot find symbol|warning: ', re.I)
+          hits = [l for l in lines if pat.search(l)]
+          msg = '\n'.join(hits[:80] + ['---- tail ----'] + lines[-80:])
+          msg = msg.replace('%', '%25').replace('\r', '').replace('\n', '%0A')
+          print('::error title=Build failed::' + msg[:60000])
+          PY
+
+      - name: Name the APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk "OrganoVirtuale-0.1.${{ github.run_number }}.apk"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrganoVirtuale-apk
+          path: OrganoVirtuale-*.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-v0.1.${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          name: Organo Virtuale 0.1.${{ github.run_number }}
+          prerelease: true
+          files: OrganoVirtuale-*.apk
+          body: |
+            Versione di prova per Android (8.0 o successivo).
+            Scarica il file .apk dal telefono, aprilo e consenti l'installazione da origini sconosciute.
